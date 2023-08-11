@@ -3,8 +3,7 @@
 
 ## Description
 `history-fp` project allows you to create a unique fingerprint based on your zsh history file. 
-This fingerprint can be safely shared with anyone to compare your usage behavior and discover similarities. 
-You can think of it as a system that answers the question "How similar do we work?" or "How similar are we?"
+This fingerprint can be safely shared with anyone to compare your usage behavior and discover similarities.
 
 No 3rd party services or APIs are involved, everything is calculated locally.
 
