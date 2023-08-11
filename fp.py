@@ -298,7 +298,7 @@ class HistoryFingerprint:
                 segments.append(cmd_segment)
 
         shingles = []
-        for index in range(max(len(segments) - 3 + 1, 1)):
+        for index in range(max(len(segments) - size + 1, 1)):
             shingle = " ".join(segments[index : index + size])
             shingles.append(shingle)
 
