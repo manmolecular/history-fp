@@ -30,7 +30,7 @@ payload = encode_fp(fp, "name@example")
 print(payload)
 ```
 The following operation will calculate your fp and compare it with the example above:
-```
+```bash
 make compare payload=bmFtZUBleGFtcGxlOjB4NDgwOTUxNDNkOTNlZWMxMDo2NDozOjM6MTAwOjE6MToxMA==
 ```
 In my case, the example has almost 44% similarity comparing with my behavior:
@@ -46,6 +46,14 @@ Same way, you can share your fingerprint with someone else to compare. Please, r
 No specific requirements or 3rd party dependencies are required, everything is included.
 - Python 3
 - `python-hashes` package (required modules are already included in the project, [official repository](https://github.com/sean-public/python-hashes))
+
+## Tests
+Tested only on macOS, only with zsh.
+
+To make sure that everything works as expected, run smoke tests:
+```bash
+make tests
+```
 
 ## Usage
 ### Create a fingerprint

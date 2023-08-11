@@ -7,5 +7,5 @@ compare_zsh:  # usage: make compare_zsh payload=<payload>
 create: create_zsh  # alias, usage: make create contact=<contact>
 compare: compare_zsh  # alias, usage: make compare payload=<payload>
 
-test:
+tests:
 	python3 test_fp.py
