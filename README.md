@@ -33,9 +33,9 @@ The following operation will calculate your fp and compare it with the example a
 ```bash
 make compare payload=bmFtZUBleGFtcGxlOjB4NDgwOTUxNDNkOTNlZWMxMDo2NDozOjM6MTAwOjE6MToxMA==
 ```
-In my case, the example has almost 44% similarity comparing with my behavior:
+In my case, the example has almost 47% similarity comparing with my behavior:
 ```
-match with 'name@example': 43.75% similarity (different)
+match with 'name@example': 46.875% similarity (different)
 ```
 For you, it can be totally different.
 
