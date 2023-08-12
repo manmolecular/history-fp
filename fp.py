@@ -2,6 +2,7 @@
 """Module creates a behavioral fingerprint based on zsh history file"""
 import argparse
 import logging
+import sys
 from base64 import b64encode, b64decode
 from collections import Counter
 from pathlib import Path
@@ -65,25 +66,25 @@ def read_history_file(file_path: Union[str, Path]) -> list[str]:
             row = byte_row.decode(encoding="utf-8")
         except UnicodeDecodeError:
             log.debug("can not decode history record '%s', skip", str(byte_row))
-            return
+            return None
 
         if not row:
             log.debug("history record is empty, skip")
-            return
+            return None
 
         if not row.startswith(": ") or ";" not in row:
             log.debug("history record '%s' is invalid or corrupted, skip", row)
-            return
+            return None
 
         try:
             _, command = row.split(sep=";", maxsplit=1)
         except ValueError:
             log.debug("can not split value from history record '%s', skip", row)
-            return
+            return None
 
         command = str(command)  # enforce type
         if command.startswith("./"):
-            return
+            return None
 
         return command
 
@@ -105,6 +106,8 @@ def read_history_file(file_path: Union[str, Path]) -> list[str]:
 
 class HistoryFingerprint:
     """Create a fingerprint from the list of commands"""
+
+    # pylint: disable=too-many-instance-attributes
 
     def __init__(
         self,
@@ -331,6 +334,9 @@ class HistoryFingerprint:
         :param other_instance: another hash instance
         :return: similarity percent
         """
+        if self._hash_instance is None:
+            raise ValueError("simhash instance is not initialized")
+
         return self._hash_instance.similarity(other_instance) * 100.0  # as percent
 
     @property
@@ -398,6 +404,7 @@ def encode_fp(fingerprint: int, contact: str, config: Optional[dict] = None) -> 
     if not config:
         config = CONFIGURATION.copy()
 
+    # pylint: disable=consider-using-f-string
     parameters = (
         "{hashbits}:{shingle_size}:{max_complexity}:{max_commands}:{include_flags}:"
         "{case_insensitive}:{known_token_threshold}".format(**config)
@@ -432,6 +439,7 @@ def get_similarity_level(similarity: float) -> str:
     :param similarity: similarity percent
     :return: readable level
     """
+    # pylint: disable=too-many-return-statements
     if similarity == 100.0:
         return "identical"
     if similarity > 99.0:
@@ -452,10 +460,15 @@ def get_similarity_level(similarity: float) -> str:
     return "totally different"
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """
+    Isolate run space in main
+    :return: None
+    """
+    # pylint: disable=too-many-locals
     if len(argv) < 2:
         print(f"usage: python3 {MODULE_NAME} --help")
-        exit(1)
+        sys.exit(1)
 
     parser = argparse.ArgumentParser(
         prog="history-fp",
@@ -611,19 +624,17 @@ if __name__ == "__main__":
             "known_token_threshold": args.token_threshold,
         }
 
-        CONFIGURATION = config  # overwrite
-
         history_commands = read_history_file(args.history)
 
         analyzer = HistoryFingerprint(history_commands, **config)
-        fp = analyzer.calculate()
+        fp = analyzer.calculate()  # pylint: disable=invalid-name
 
         encoded_fp = encode_fp(fp, args.contact, config=config)
 
         print("=" * 50)
         print(f"payload with fingerprint: {encoded_fp}")
 
-        exit(0)
+        sys.exit(0)
 
     if args.mode == "compare":
         history_commands = read_history_file(args.history)
@@ -636,7 +647,7 @@ if __name__ == "__main__":
 
             # Config depends on passed payload
             analyzer = HistoryFingerprint(history_commands, **config)
-            fp = analyzer.calculate()
+            analyzer.calculate()
 
             similarity = analyzer.compare(passed_hash)
             similarity_level = get_similarity_level(similarity)
@@ -649,7 +660,11 @@ if __name__ == "__main__":
                 f"match with '{contact}': {similarity}% similarity ({similarity_level})"
             )
 
-        exit(0)
+        sys.exit(0)
 
     print("invalid parameters, exit")
-    exit(1)
+    sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
