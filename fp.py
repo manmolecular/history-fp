@@ -19,7 +19,7 @@ UNWANTED_PREFIXES = ("|", ">", "+", "$", '"', "'", "\\", "http", "/", "~", ".")
 UNWANTED_SUFFIXES = ("csv", "txt", "yml", "yaml", "json", "py", "sql", "pub", "md")
 
 # Define default values for processing (parameters are included in payload)
-HASHBITS = 64
+HASHBITS = 128
 SHINGLE_SIZE = 3
 MAX_COMMAND_COMPLEXITY = 3
 MAX_COMMANDS = 100
@@ -446,15 +446,13 @@ def get_similarity_level(similarity: float) -> str:
         return "almost identical"
     if similarity > 95.0:
         return "very similar"
-    if similarity > 85.0:
-        return "similar"
     if similarity > 75.0:
-        return "not very similar"
+        return "similar"
     if similarity > 50.0:
-        return "not similar"
+        return "not so similar"
     if similarity > 35.0:
         return "different"
-    if similarity > 20.0:
+    if similarity > 15.0:
         return "very different"
 
     return "totally different"
