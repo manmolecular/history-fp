@@ -1,3 +1,6 @@
+help:
+	python3 fp.py --help
+
 create_zsh:  # usage: make create_zsh contact=<contact>
 	python3 fp.py create --history ~/.zsh_history --contact "$(contact)"
 
