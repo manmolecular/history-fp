@@ -7,6 +7,13 @@ This fingerprint can be safely shared with anyone to compare your usage behavior
 
 No 3rd party services or APIs are involved, everything is calculated locally.
 
+## What is the point?
+I thought that it would be funny enough to be able to compare my daily command line usage behavior with anyone just by sharing one string and this repo.
+
+You can think of it as a behavioral matching system that answers the questions _"What is my compatibility/likeness/similarity % with someone?"_ or _"How similar are we?"_
+
+No serious application here, but you can use the same approach and techniques in other fields.
+
 ## Quick Example
 You can use the following example fingerprint to compare it with your usage behavior, the payload is:
 ```
